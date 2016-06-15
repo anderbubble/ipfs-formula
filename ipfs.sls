@@ -1,3 +1,5 @@
+{% set ipfs_repository_dir = '/srv/ipfs' %}
+
 /var/local/ipfs/:
   file:
     - directory
@@ -14,12 +16,13 @@
 
 /usr/local/bin/ipfs:
   file:
-    - symlink
-    - target: /opt/ipfs/go-ipfs/ipfs
+    - managed
+    - source: salt://ipfs/files/ipfs.sh
     - user: root
     - group: root
+    - mode: 0755
 
-/srv/ipfs:
+{{ ipfs_repository_dir }}:
   file:
     - directory
     - user: ipfs
@@ -48,3 +51,29 @@ ipfs:
       - ipfs
     - require:
       - user: ipfs
+
+  service:
+    - running
+    - enable: True
+    - watch:
+        - file: /etc/systemd/system/ipfs.service
+        - file: /etc/sysconfig/ipfs
+
+/etc/systemd/system/ipfs.service:
+  file:
+    - managed
+    - source: salt://ipfs/files/ipfs.service
+    - user: root
+    - group: root
+    - mode: 0644
+
+/etc/sysconfig/ipfs:
+  file:
+    - managed
+    - source: salt://ipfs/files/sysconfig
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
+    - context:
+        ipfs_repository_dir: {{ ipfs_repository_dir }}

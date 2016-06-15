@@ -1,0 +1,10 @@
+[Unit]
+Description=IPFS - A peer-to-peer hypermedia protocol
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/sysconfig/ipfs
+ExecStart=/opt/ipfs/go-ipfs/ipfs daemon
+
+[Install]
+WantedBy=multi-user.target

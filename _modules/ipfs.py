@@ -15,14 +15,14 @@ def demote (user, group):
 
 
 def init (name, user=None, group=None):
-    args = ['ipfs', 'init']
+    args = ['/opt/ipfs/go-ipfs/ipfs', 'init']
     env = os.environ.copy()
     env['IPFS_PATH'] = name
     subprocess.check_call(args, env=env, preexec_fn=lambda: demote(user, group))
 
 
 def show_config (name, user=None, group=None):
-    args = ['ipfs', 'config', 'show']
+    args = ['/opt/ipfs/go-ipfs/ipfs', 'config', 'show']
     env = os.environ.copy()
     env['IPFS_PATH'] = name
     subprocess.check_call(args, env=env, preexec_fn=lambda: demote(user, group))
